@@ -1,0 +1,17 @@
+services:
+  db:
+    image: mysql:8
+    container_name: db-dishine
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: totoro10
+      MYSQL_DATABASE: dishine
+      MYSQL_USER: dishine
+      MYSQL_PASSWORD: totoro10
+    volumes:
+      - db_data:/var/lib/mysql
+      
+volumes:
+  db_data:
