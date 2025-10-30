@@ -18,6 +18,9 @@ class SendVerificationEmail implements ShouldQueue
 
     public function handle(MailService $mailService): void
     {
-        $mailService->send($this->user->email, new VerificationEmail($this->user, $this->url));
+        $mailService->send(
+            $this->user->email, 
+            new VerificationEmail($this->user, $this->url)
+        );
     }
 }

@@ -37,10 +37,13 @@ class AuthController extends Controller
         }
     }
 
+    public function user(Request $request) {
+        return response()->json($request->user());
+    }
+
     public function logout(Request $request)
     {
         $result = $this->authService->logout($request);
-
         return response()->json($result);
     }
 }
