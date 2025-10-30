@@ -6,6 +6,7 @@ use App\Http\Controllers\UserAddressController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
 
+// Auth Routes
 Route::prefix('auth')->group(function() {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
@@ -14,12 +15,18 @@ Route::prefix('auth')->group(function() {
     Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 });
 
-// === Route: User
-Route::prefix('user')->middleware('auth:sanctum')->group(function() {
-    // == Route: User Address
-    Route::apiResource('address', UserAddressController::class);
+// User Routes
+Route::middleware('auth:sanctum')->group(function() {
+    Route::prefix('user')->group(function() {
+        Route::apiResource('address', UserAddressController::class);
+    });
 });
 
+// Product Routes
+Route::get('products', [ProductController::class, 'index']);
+Route::get('products/{slug}', [ProductController::class, 'show']);
 Route::middleware('auth:sanctum')->group(function() {
-    Route::get('products', [ProductController::class, 'index']);
+    Route::post('products', [ProductController::class, 'store']);
+    Route::put('products/{slug}', [ProductController::class, 'update']);
+    Route::delete('products/{slug}', [ProductController::class, 'destroy']);
 });
