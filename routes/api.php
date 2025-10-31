@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
+use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\UserAddressController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,8 @@ Route::middleware('auth:sanctum')->group(function() {
 Route::prefix('products')->group(function () {
     Route::get('/', [ProductController::class, 'index']);
     Route::get('{slug}', [ProductController::class, 'show']);
+    // Product Variants by product_id
+    Route::get('{slug}/variants', [ProductVariantController::class, 'byProduct']);
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', [ProductController::class, 'store']);
         Route::put('{slug}', [ProductController::class, 'update']);
@@ -34,4 +37,15 @@ Route::prefix('products')->group(function () {
     });
     Route::post('{slug}/images', [ProductImageController::class, 'addImages']);
     Route::delete('{slug}/images/{id}', [ProductImageController::class, 'destroy']);
+});
+
+// Product Variant Routes
+Route::prefix('product-variants')->group(function () {
+    Route::get('/', [ProductVariantController::class, 'index']);
+    Route::get('{id}', [ProductVariantController::class, 'show']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/', [ProductVariantController::class, 'store']);
+        Route::put('{id}', [ProductVariantController::class, 'update']);
+        Route::delete('{id}', [ProductVariantController::class, 'destroy']);
+    });
 });

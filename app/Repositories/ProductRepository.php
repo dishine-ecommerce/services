@@ -19,7 +19,7 @@ class ProductRepository
 
   public function getById($id)
   {
-    return $this->model->find($id);
+    return $this->model->with(['productImages', 'productVariants'])->find($id);
   }
 
   public function getBySlug(string $slug)
