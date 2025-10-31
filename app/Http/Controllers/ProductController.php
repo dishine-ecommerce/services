@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Slug;
 use App\Http\Requests\CreateProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Services\ProductService;
 use Illuminate\Http\Request;
 
@@ -33,14 +34,16 @@ class ProductController extends Controller
         $data = [
             ...$validated,
             'slug' => Slug::generate($validated['name']),
+            'images' => $request->file('images', []),
         ];
         $product = $this->productService->create($data);
+        
         return response()->json($product, 201);
     }
 
-    public function update(Request $request, $slug)
+    public function update(UpdateProductRequest $request, $slug)
     {
-        $product = $this->productService->update($slug, $request->all());
+        $product = $this->productService->update($slug, $request->validated());
         if (!$product) return response()->json(['message' => 'Not found'], 404);
         return response()->json($product);
     }

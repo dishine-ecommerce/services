@@ -14,7 +14,7 @@ class ProductRepository
 
   public function get()
   {
-    return $this->model->all();
+    return $this->model->with('productImages')->get();
   }
 
   public function getById($id)

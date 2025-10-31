@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\UserAddressController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
@@ -23,10 +24,14 @@ Route::middleware('auth:sanctum')->group(function() {
 });
 
 // Product Routes
-Route::get('products', [ProductController::class, 'index']);
-Route::get('products/{slug}', [ProductController::class, 'show']);
-Route::middleware('auth:sanctum')->group(function() {
-    Route::post('products', [ProductController::class, 'store']);
-    Route::put('products/{slug}', [ProductController::class, 'update']);
-    Route::delete('products/{slug}', [ProductController::class, 'destroy']);
+Route::prefix('products')->group(function () {
+    Route::get('/', [ProductController::class, 'index']);
+    Route::get('{slug}', [ProductController::class, 'show']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/', [ProductController::class, 'store']);
+        Route::put('{slug}', [ProductController::class, 'update']);
+        Route::delete('{slug}', [ProductController::class, 'destroy']);
+    });
+    Route::post('{slug}/images', [ProductImageController::class, 'addImages']);
+    Route::delete('{slug}/images/{id}', [ProductImageController::class, 'destroy']);
 });

@@ -2,14 +2,18 @@
 
 namespace App\Services;
 
+use App\Repositories\ProductImageRepository;
 use App\Repositories\ProductRepository;
+use Illuminate\Support\Facades\Storage;
 
 class ProductService
 {
   protected $productRepo;
+  protected $pImageService;
   
   public function __construct() {
     $this->productRepo = new ProductRepository();
+    $this->pImageService = new ProductImageService();
   }
 
   public function get()
@@ -24,16 +28,32 @@ class ProductService
 
   public function create(array $data)
   {
-    return $this->productRepo->create($data);
+    $newProduct = $this->productRepo->create($data);
+    $images = $data['images'] ?? [];
+
+    $this->pImageService->addImages($images, $newProduct->id);
+
+    return $newProduct;
   }
 
   public function update($slug, array $data)
   {
-    return $this->productRepo->update($slug, $data);
+    $product = $this->productRepo->getBySlug($slug);
+    if (!$product) {
+      return null;
+    }
+    $updatedProduct = $this->productRepo->update($slug, $data);
+    return $updatedProduct;
   }
 
   public function delete($slug)
   {
-    return $this->productRepo->delete($slug);
+    $product = $this->productRepo->getBySlug($slug);
+    if (!$product) {
+      return false;
+    }
+    $this->productRepo->delete($slug);
+    $this->pImageService->deleteByProductId($product->id);
+    return true;
   }
 }
