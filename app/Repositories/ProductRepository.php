@@ -19,12 +19,12 @@ class ProductRepository
 
   public function getById($id)
   {
-    return $this->model->with(['productImages', 'productVariants'])->find($id);
+    return $this->model->with(['productImages', 'productVariants.productVariantImages'])->find($id);
   }
 
   public function getBySlug(string $slug)
   {
-    return $this->model->firstWhere('slug', $slug);
+    return $this->model->with(['productImages', 'productVariants.productVariantImages'])->firstWhere('slug', $slug);
   }
 
   public function create(array $data)

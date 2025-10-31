@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ProductVariantController;
+use App\Http\Controllers\ProductVariantImageController;
 use App\Http\Controllers\UserAddressController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
@@ -47,5 +48,9 @@ Route::prefix('product-variants')->group(function () {
         Route::post('/', [ProductVariantController::class, 'store']);
         Route::put('{id}', [ProductVariantController::class, 'update']);
         Route::delete('{id}', [ProductVariantController::class, 'destroy']);
+        Route::post('{id}/images', [ProductVariantImageController::class, 'addImages']);
     });
 });
+
+// Variant Images delete
+Route::delete('product-variant-images/{id}', [ProductVariantImageController::class, 'destroy'])->middleware('auth:sanctum');
