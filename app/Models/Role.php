@@ -9,9 +9,4 @@ class Role extends Model
     protected $fillable = ['name', 'slug'];
 
     public $timestamps = false;
-
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'role_user');
-    }
 }

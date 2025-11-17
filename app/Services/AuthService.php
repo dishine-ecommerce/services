@@ -5,10 +5,7 @@ namespace App\Services;
 use App\Helpers\Password;
 use App\Helpers\VerificationEncryption;
 use App\Jobs\SendVerificationEmail;
-use App\Repositories\RoleRepository;
 use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -31,11 +28,9 @@ class AuthService
         $user = DB::transaction(function () use ($data) {
             // create user
             $data['password'] = Password::hash($data['password']);
-            $user = $this->userRepo->create($data);
-
-            // assign role (customer)
             $customerRole = $this->roleService->getBySlug('customer');
-            $user->roles()->attach($customerRole->id);
+            $data['role_id'] = $customerRole->id;
+            $user = $this->userRepo->create($data);
 
             return $user;
         });
@@ -54,14 +49,17 @@ class AuthService
     {
         $user = $this->userRepo->getByEmail($email);
         if (!$user) {
+            Log::error("Login failed: Invalid credentials.", ['email' => $email]);
             throw new \Exception("Invalid Credentials", 401);
         }
         
         if (!Password::check($password, $user->password)) {
+            Log::error("Login failed: Invalid password.", ['email' => $email, 'user_id' => $user->id]);
             throw new \Exception("Invalid Credentials", 401);
         }
     
         if (!$this->userRepo->isVerified($user)) {
+            Log::error("Login failed: Email not verified.", ['email' => $email, 'user_id' => $user->id]);
             throw new \Exception("Email not verified", 403);
         }
 

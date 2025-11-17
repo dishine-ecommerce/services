@@ -13,7 +13,6 @@ class RoleSeeder extends Seeder
         DB::table('roles')->insert([
             ['name' => 'Admin', 'slug' => 'admin'],
             ['name' => 'Customer', 'slug' => 'customer'],
-            ['name' => 'Reseller', 'slug' => 'reseller'],
         ]);
     }
 }

@@ -2,16 +2,52 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\User;
+use App\Services\RoleService;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+    protected $roleService;
+
+    public function __construct() {
+        $this->roleService = new RoleService();
+    }
+    
     public function run(): void
     {
-        //
+        $data = [
+            [
+                "name" => "Putra Setyonugroho",
+                "email" => "putra@gmail.com",
+                "password" => Hash::make("putra123"),
+                "role" => "admin",
+            ],
+            [
+                "name" => "Febryana Zumal",
+                "email" => "zumal@gmail.com",
+                "password" => Hash::make("zumal123"),
+                "role" => "customer",
+            ],
+            [
+                "name" => "Anonymous",
+                "email" => "anon@gmail.com",
+                "password" => Hash::make("anon123"),
+                "role" => "customer",
+                "is_reseller" => true,
+            ],
+        ];
+
+        foreach ($data as $user) {
+            $role = $this->roleService->getBySlug($user["role"]);
+            $newUser = User::create([
+                "name" => $user["name"],
+                "email" => $user["email"],
+                "password" => Hash::make($user["password"]),
+                "role_id" => $role->id,
+                "email_verified_at" => now(),
+            ]);
+        }
     }
 }
