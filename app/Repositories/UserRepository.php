@@ -20,7 +20,7 @@ class UserRepository
 
     public function getById($id)
     {
-        return $this->model->find($id);
+        return $this->model->with('role')->find($id);
     }
 
     public function getByEmail($email)

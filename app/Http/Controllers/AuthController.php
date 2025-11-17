@@ -37,8 +37,16 @@ class AuthController extends Controller
         }
     }
 
-    public function user(Request $request) {
-        return response()->json($request->user());
+    public function user(Request $request)
+    {
+        try {
+            $user = $this->authService->me($request->user() ? $request->user()->id : null);
+            return response()->json($user);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], $e->getCode() ?: 401);
+        }
     }
 
     public function logout(Request $request)

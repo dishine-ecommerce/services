@@ -71,6 +71,16 @@ class AuthService
         ];
     }
 
+    public function me($userId)
+    {
+        if (!$userId) {
+            throw new \Exception("User not authenticated.", 401);
+        }
+
+        $user = $this->userRepo->getById($userId);
+        return $user;
+    }
+
     public function logout(Request $request)
     {
         // Revoke the current access token

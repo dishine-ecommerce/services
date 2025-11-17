@@ -21,19 +21,19 @@ class UserSeeder extends Seeder
             [
                 "name" => "Putra Setyonugroho",
                 "email" => "putra@gmail.com",
-                "password" => Hash::make("putra123"),
+                "password" => "putra123",
                 "role" => "admin",
             ],
             [
                 "name" => "Febryana Zumal",
                 "email" => "zumal@gmail.com",
-                "password" => Hash::make("zumal123"),
+                "password" => "zumal123",
                 "role" => "customer",
             ],
             [
                 "name" => "Anonymous",
                 "email" => "anon@gmail.com",
-                "password" => Hash::make("anon123"),
+                "password" => "anon123",
                 "role" => "customer",
                 "is_reseller" => true,
             ],
