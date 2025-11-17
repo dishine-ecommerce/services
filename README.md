@@ -23,13 +23,15 @@ This project is built using the following technologies:
 ✗ = In Progress / Not Done
 
 - [✔] Login
-- [✔] Register
+- [✔] Register & Verify Email
 - [✔] Product
 - [✔] Cart
-- [✗] Checkout
+- [✔] Checkout
+- [✔] Order
+- [✔] Payment
+- [✗] Track & History
 - [✗] Ongkos Kirim
 - [✗] Reseller
-- [✗] Order Track & History
 - [✗] Dashboard Analytics
 
 ### Team

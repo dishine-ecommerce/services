@@ -38,4 +38,20 @@ class OrderController
       ], $statusCode);
     }
   }
+
+  public function history()
+  {
+    try {
+      $orders = $this->orderService->getHistory();
+      return response()->json([
+        'orders' => $orders,
+        'message' => 'Order history retrieved successfully',
+      ]);
+    } catch (\Exception $e) {
+      $statusCode = $e->getCode();
+      return response()->json([
+        'error' => $e->getMessage()
+      ], $statusCode);
+    }
+  }
 }

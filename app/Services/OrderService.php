@@ -85,4 +85,10 @@ class OrderService
       return $order->load(['items', 'payment']);
     });
   }
+
+  public function getHistory()
+  {
+    $userId = auth()->id();
+    return $this->orderRepo->findByUser($userId)->load(['items.productVariant.product', 'payment']);
+  }
 }
