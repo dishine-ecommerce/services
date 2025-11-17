@@ -25,14 +25,12 @@ This project is built using the following technologies:
 - [✔] Login
 - [✔] Register
 - [✔] Product
-- [✗] Reseller
-- [✗] Order Track & History
-- [✗] About
-- [✗] Cart
+- [✔] Cart
 - [✗] Checkout
 - [✗] Ongkos Kirim
+- [✗] Reseller
+- [✗] Order Track & History
 - [✗] Dashboard Analytics
-
 
 ### Team
 
