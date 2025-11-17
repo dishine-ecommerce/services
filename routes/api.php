@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ProductVariantController;
@@ -54,3 +55,9 @@ Route::prefix('product-variants')->group(function () {
 
 // Variant Images delete
 Route::delete('product-variant-images/{id}', [ProductVariantImageController::class, 'destroy'])->middleware(['auth:sanctum', 'role:admin']);
+
+// Carts
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('carts/clear', [CartController::class, 'clear']);
+    Route::apiResource('carts', CartController::class);
+});

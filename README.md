@@ -25,7 +25,7 @@ This project is built using the following technologies:
 - [✔] Login
 - [✔] Register
 - [✔] Product
-- [✗] Reseller Price
+- [✗] Reseller
 - [✗] Order Track & History
 - [✗] About
 - [✗] Cart

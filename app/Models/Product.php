@@ -8,6 +8,7 @@ class Product extends Model
 {
     protected $fillable = ['name', 'slug', 'category_id', 'description', 'base_price', 'status'];
 
+    // ====== RELATION METHOD ======
     public function category() 
     {
         return $this->belongsTo(Category::class);
@@ -21,5 +22,10 @@ class Product extends Model
     public function productVariants()
     {
         return $this->hasMany(ProductVariant::class);
+    }
+
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
     }
 }

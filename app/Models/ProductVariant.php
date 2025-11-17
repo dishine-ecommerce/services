@@ -10,6 +10,7 @@ class ProductVariant extends Model
         'product_id', 'variant_code', 'color', 'size', 'price', 'stock'
     ];
 
+    // ====== RELATION METHOD ======
     public function product() 
     {
         return $this->belongsTo(Product::class);
@@ -18,5 +19,10 @@ class ProductVariant extends Model
     public function productVariantImages()
     {
         return $this->hasMany(ProductVariantImage::class);
+    }
+
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
     }
 }
