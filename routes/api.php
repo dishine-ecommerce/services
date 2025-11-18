@@ -1,15 +1,16 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ShippingController;
+use App\Http\Controllers\UserAddressController;
 use App\Http\Controllers\ProductImageController;
+use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\ProductVariantController;
 use App\Http\Controllers\ProductVariantImageController;
-use App\Http\Controllers\UserAddressController;
-use App\Http\Controllers\VerificationController;
-use Illuminate\Support\Facades\Route;
 
 // Auth Routes
 Route::prefix('auth')->group(function() {
@@ -65,4 +66,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // Orders
     Route::post('order', [OrderController::class, 'order']);
     Route::get('order', [OrderController::class, 'history']);
+
+    // Shipping
+    Route::prefix('shipping')->group(function () {
+        Route::get('/provinces', [ShippingController::class, 'getProvinces']);
+        Route::get('/city/{provinceId}', [ShippingController::class, 'getCities']);
+        Route::post('/cost', [ShippingController::class, 'calculateShipping']);
+    });
 });

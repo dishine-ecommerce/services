@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'rajaongkir' => [
+        'api_key' => env('RAJA_ONGKIR_API_KEY'),
+        'base_url' => env('RAJA_ONGKIR_BASE_URL', 'https://rajaongkir.komerce.id/api/v1'),
+        'origin_city' => env('RAJA_ONGKIR_ORIGIN_CITY', 63), // BEKASI
+    ]
 ];

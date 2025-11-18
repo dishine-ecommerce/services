@@ -29,7 +29,7 @@ This project is built using the following technologies:
 - [✔] Checkout
 - [✔] Order
 - [✔] Payment
-- [✗] Track & History
+- [✔] Track & History
 - [✗] Ongkos Kirim
 - [✗] Reseller
 - [✗] Dashboard Analytics
