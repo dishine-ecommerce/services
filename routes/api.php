@@ -58,8 +58,8 @@ Route::prefix('product-variants')->group(function () {
 // Variant Images delete
 Route::delete('product-variant-images/{id}', [ProductVariantImageController::class, 'destroy'])->middleware(['auth:sanctum', 'role:admin']);
 
-// Carts
 Route::middleware('auth:sanctum')->group(function () {
+    // Carts
     Route::post('carts/clear', [CartController::class, 'clear']);
     Route::apiResource('carts', CartController::class);
     
@@ -72,5 +72,17 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/provinces', [ShippingController::class, 'getProvinces']);
         Route::get('/city/{provinceId}', [ShippingController::class, 'getCities']);
         Route::post('/cost', [ShippingController::class, 'calculateShipping']);
+    });
+
+    // Category Routes
+    Route::get('categories', [\App\Http\Controllers\CategoryController::class, 'index']);
+    Route::get('categories/{id}', [\App\Http\Controllers\CategoryController::class, 'show']);
+    Route::get('categories/parent/{parentId}', [\App\Http\Controllers\CategoryController::class, 'getByParentId']);
+    Route::get('categories-root', [\App\Http\Controllers\CategoryController::class, 'root']);
+
+    Route::middleware(['role:admin'])->group(function () {
+        Route::post('categories', [\App\Http\Controllers\CategoryController::class, 'store']);
+        Route::put('categories/{id}', [\App\Http\Controllers\CategoryController::class, 'update']);
+        Route::delete('categories/{id}', [\App\Http\Controllers\CategoryController::class, 'destroy']);
     });
 });

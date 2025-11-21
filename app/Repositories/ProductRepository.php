@@ -14,12 +14,12 @@ class ProductRepository
 
   public function get()
   {
-    return $this->model->with('productImages')->get();
+    return $this->model->with('category', 'productImages')->get();
   }
 
   public function getById($id)
   {
-    return $this->model->with(['productImages', 'productVariants.productVariantImages'])->find($id);
+    return $this->model->with(['category', 'productImages', 'productVariants.productVariantImages'])->find($id);
   }
 
   public function getBySlug(string $slug)
