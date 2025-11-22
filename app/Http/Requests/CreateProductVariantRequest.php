@@ -18,6 +18,7 @@ class CreateProductVariantRequest extends BaseFormRequest
             'variant_code' => ['required', 'string', 'max:255', 'unique:product_variants,variant_code'],
             'color'        => 'required|string|max:255',
             'size'         => 'required|string|max:255',
+            'reseller_size'=> 'required|string|max:255',
             'price'        => 'required|integer|min:0',
             'stock'        => 'required|integer|min:0',
         ];

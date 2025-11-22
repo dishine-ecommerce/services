@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProductVariant extends Model
 {
     protected $fillable = [
-        'product_id', 'variant_code', 'color', 'size', 'price', 'stock'
+        'product_id', 'variant_code', 'color', 'size', 'price', 'stock', 'reseller_price'
     ];
 
     // ====== RELATION METHOD ======
@@ -18,7 +18,7 @@ class ProductVariant extends Model
 
     public function productVariantImages()
     {
-        return $this->hasMany(ProductVariantImage::class);
+        return $this->hasMany(related: ProductVariantImage::class);
     }
 
     public function carts()

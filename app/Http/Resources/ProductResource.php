@@ -15,6 +15,7 @@ class ProductResource extends BaseResource
             'category_id' => $this->category_id,  
             'description' => $this->description,  
             'base_price' => $this->base_price,  
+            'reseller_price' => $this->reseller_price,  
             'status' => $this->status,
         ];
     }
