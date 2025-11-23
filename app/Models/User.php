@@ -18,7 +18,6 @@ class User extends Authenticatable
         'avatar',       // nullable
         'password',
         'role_id',
-        'is_reseller',
         'provider',     // nullable
         'provider_id',  // nullable
     ];

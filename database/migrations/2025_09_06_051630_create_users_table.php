@@ -25,7 +25,6 @@ return new class extends Migration
 
             // role
             $table->foreignIdFor(Role::class)->constrained()->onDelete("cascade");
-            $table->boolean("is_reseller")->default(false);
 
             $table->rememberToken();
             $table->timestamps();

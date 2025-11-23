@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Response;
 use App\Http\Requests\CreateCartRequest;
 use App\Services\CartService;
 use Illuminate\Http\Request;
@@ -27,7 +28,7 @@ class CartController extends Controller
         $data = $request->validated();
         $data["user_id"] = auth()->user()->id;
         $cartItem = $this->cartService->addToCart($data);
-        return response()->json($cartItem, 201);
+        return Response::success('berhasil menambahkan keranjang', $cartItem);
     }
 
     public function update(Request $request, $id)

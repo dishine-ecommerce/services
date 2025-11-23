@@ -20,7 +20,8 @@ class OrderController
       $order = $this->orderService->createOrder(
         $userId,
         $request->input('cart_ids', []),
-        $request->input('payment_method')
+        $request->input('payment_method'),
+        $request->input('is_reseller'),
       );
 
       return response()->json([

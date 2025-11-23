@@ -15,6 +15,7 @@ class CreateOrderRequest extends BaseFormRequest
             'cart_ids' => ['required', 'array', 'min:1'],
             'cart_ids.*' => ['integer', 'exists:carts,id'],
             'payment_method' => ['required', 'string', 'max:100'],
+            'is_reseller' => ['required', 'boolean'],
         ];
     }
 }

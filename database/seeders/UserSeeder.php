@@ -35,7 +35,6 @@ class UserSeeder extends Seeder
                 "email" => "anon@gmail.com",
                 "password" => "anon123",
                 "role" => "customer",
-                "is_reseller" => true,
             ],
         ];
 

@@ -24,7 +24,7 @@ class OrderService
     $this->cartRepo = new CartRepository();
   }
 
-  public function createOrder(int $userId, array $cartIds, string $paymentMethod)
+  public function createOrder(int $userId, array $cartIds, string $paymentMethod, bool $isReseller)
   {
     $cartIds = array_values(array_unique($cartIds));
 
@@ -32,7 +32,7 @@ class OrderService
       throw new \Exception('Cart items are required', 422);
     }
 
-    return DB::transaction(function () use ($userId, $cartIds, $paymentMethod) {
+    return DB::transaction(function () use ($userId, $cartIds, $paymentMethod, $isReseller) {
       $cartItems = $this->cartRepo->findByUserAndIds($userId, $cartIds, true);
 
       if ($cartItems->isEmpty()) {
@@ -41,6 +41,14 @@ class OrderService
 
       if ($cartItems->count() !== count($cartIds)) {
         throw new \Exception('Some cart items are invalid', 422);
+      }
+      
+      $totalQuantity = $cartItems->sum(function ($item) {
+        return $item->quantity;
+      });
+      
+      if ($isReseller === true && $totalQuantity < 5) {
+        throw new \Exception('Reseller wajib membeli minimal 5 item', 400);
       }
 
       $totalAmount = $cartItems->sum(function ($item) {
@@ -54,9 +62,14 @@ class OrderService
       ]);
 
       $this->orderItemRepo->createMany(
-        $cartItems->map(function ($cartItem) use ($order) {
+        $cartItems->map(function ($cartItem) use ($isReseller, $order) {
           $product = $cartItem->product ?? optional($cartItem->productVariant)->product;
           $variant = $cartItem->productVariant;
+          $price = $isReseller ? $product->reseller_price : $product->base_price;
+
+          if ($variant) {
+            $price = $isReseller ? $variant->reseller_price : $variant->price;
+          }
 
           return [
             'order_id' => $order->id,
@@ -65,7 +78,7 @@ class OrderService
             'product_name' => $product?->name ?? 'Unknown Product',
             'variant_name' => $variant?->variant_code,
             'quantity' => $cartItem->quantity,
-            'price' => $cartItem->price,
+            'price' => $price,
             'subtotal' => $cartItem->price * $cartItem->quantity,
           ];
         })->toArray()

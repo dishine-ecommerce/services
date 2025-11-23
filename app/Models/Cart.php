@@ -11,7 +11,6 @@ class Cart extends Model
         'product_variant_id',
         'product_id',
         'quantity',
-        'price',
     ];
 
     // ====== RELATION METHOD ======
