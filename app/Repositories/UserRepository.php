@@ -25,7 +25,7 @@ class UserRepository
 
     public function getByEmail($email)
     {
-        return $this->model->where('email', $email)->first();
+        return $this->model->with('role')->where('email', $email)->first();
     }
 
     public function verify(User $user)

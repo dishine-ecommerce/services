@@ -46,6 +46,38 @@ class ShippingController
     }
   }
 
+  public function getDistricts(Request $request, $cityId)
+  {
+    try {
+      $districts = $this->rajaOngkir->getDistricts($cityId);
+      return response()->json([
+        'success' => true,
+        'data' => $districts
+      ]);
+    } catch (\Exception $e) {
+      return response()->json([
+        'success' => false,
+        'message' => $e->getMessage()
+      ], 500);
+    }
+  }
+
+  public function getSubDistricts(Request $request, $subDistrictId)
+  {
+    try {
+      $subDistricts = $this->rajaOngkir->getSubDistricts($subDistrictId);
+      return response()->json([
+        'success' => true,
+        'data' => $subDistricts
+      ]);
+    } catch (\Exception $e) {
+      return response()->json([
+        'success' => false,
+        'message' => $e->getMessage()
+      ], 500);
+    }
+  }
+
   public function calculateShipping(Request $request)
   {
     $request->validate([

@@ -24,7 +24,7 @@ class ProductRepository
 
   public function getBySlug(string $slug)
   {
-    return $this->model->with(['productImages', 'productVariants.productVariantImages'])->firstWhere('slug', $slug);
+    return $this->model->with(['category', 'productImages', 'productVariants.productVariantImages'])->firstWhere('slug', $slug);
   }
 
   public function create(array $data)

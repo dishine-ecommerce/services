@@ -19,8 +19,10 @@ return new class extends Migration
             $table->string('phone');
             $table->string('label');
             $table->string('address_line');
-            $table->string('city');
             $table->string('province');
+            $table->string('city');
+            $table->string('district');
+            $table->string('sub_district');
             $table->integer('postal_code');
             $table->timestamps();
         });

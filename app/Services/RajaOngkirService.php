@@ -50,6 +50,36 @@ class RajaOngkirService
   }
 
   /**
+   * Get districts by city
+   */
+  public function getDistricts($cityId)
+  {
+    $cacheKey = "rajaongkir_districts_{$cityId}";
+    return Cache::remember($cacheKey, 86400, function () use ($cityId) {
+      $url = $this->baseUrl . '/destination/district/' . $cityId;
+      $params = ['headers' => ['key' => $this->apiKey]];
+      $response = $this->client->get($url, $params);
+      $data = json_decode($response->getBody(), true);
+      return $data['data'];
+    });
+  }
+
+  /**
+   * Get subdistricts by district
+   */
+  public function getSubDistricts($districtId)
+  {
+    $cacheKey = "rajaongkir_subdistricts_{$districtId}";
+    return Cache::remember($cacheKey, 86400, function () use ($districtId) {
+      $url = $this->baseUrl . '/destination/sub-district/' . $districtId;
+      $params = ['headers' => ['key' => $this->apiKey]];
+      $response = $this->client->get($url, $params);
+      $data = json_decode($response->getBody(), true);
+      return $data['data'];
+    });
+  }
+
+  /**
    * Calculate shipping cost
    */
   public function getCost($origin, $destination, $weight, $courier)

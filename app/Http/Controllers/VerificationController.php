@@ -24,7 +24,8 @@ class VerificationController extends Controller
         try {
             $data = VerificationEncryption::decrypt($token);
             $verify = $this->userService->verifyEmail($data);
-            return $verify;
+
+            return redirect()->away('http://localhost:5173/login');
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], $e->getCode() ?: 500);
         }

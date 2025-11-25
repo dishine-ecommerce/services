@@ -14,6 +14,7 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->string('transaction_id')->unique();
             $table->foreignIdFor(User::class)->constrained()->onDelete("cascade");
             $table->unsignedBigInteger('total_amount');
             $table->enum('status', ['pending', 'processing', 'completed', 'cancelled']);

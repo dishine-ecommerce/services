@@ -65,12 +65,17 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Orders
     Route::post('order', [OrderController::class, 'order']);
+    Route::get('order/all', [OrderController::class, 'all'])->middleware('role:admin');
     Route::get('order', [OrderController::class, 'history']);
+    Route::get('order/{transactionId}', [OrderController::class, 'show']);
+    Route::put('order/{id}', [OrderController::class, 'update']);
 
     // Shipping
     Route::prefix('shipping')->group(function () {
         Route::get('/provinces', [ShippingController::class, 'getProvinces']);
         Route::get('/city/{provinceId}', [ShippingController::class, 'getCities']);
+        Route::get('/district/{cityId}', [ShippingController::class, 'getDistricts']);
+        Route::get('/subdistrict/{subDistrictId}', [ShippingController::class, 'getSubDistricts']);
         Route::post('/cost', [ShippingController::class, 'calculateShipping']);
     });
 

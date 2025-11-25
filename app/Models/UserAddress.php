@@ -12,8 +12,10 @@ class UserAddress extends Model
         'phone', 
         'label', 
         'address_line', 
-        'city', 
         'province', 
+        'city', 
+        'district', 
+        'sub_district', 
         'postal_code',
     ];
 }

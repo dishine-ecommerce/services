@@ -18,8 +18,10 @@ class CreateUserAddress extends FormRequest
             'phone' => 'required|string|max:20',
             'label' => 'required|string|max:255',
             'address_line' => 'required|string|max:255',
-            'city' => 'required|string|max:100',
             'province' => 'required|string|max:100',
+            'city' => 'required|string|max:100',
+            'district' => 'required|string|max:100',
+            'sub_district' => 'required|string|max:100',
             'postal_code' => 'required|integer',
         ];
     }

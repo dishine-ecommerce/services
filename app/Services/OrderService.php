@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Helpers\Transaction;
+use App\Helpers\Upload;
 use App\Repositories\CartRepository;
 use App\Repositories\OrderItemRepository;
 use App\Repositories\OrderRepository;
@@ -24,7 +26,12 @@ class OrderService
     $this->cartRepo = new CartRepository();
   }
 
-  public function createOrder(int $userId, array $cartIds, string $paymentMethod, bool $isReseller)
+  public function allOrders($status = null)
+  {
+    return $this->orderRepo->all($status);
+  }
+
+  public function createOrder(int $userId, array $cartIds, bool $isReseller, $paymentProof)
   {
     $cartIds = array_values(array_unique($cartIds));
 
@@ -32,7 +39,7 @@ class OrderService
       throw new \Exception('Cart items are required', 422);
     }
 
-    return DB::transaction(function () use ($userId, $cartIds, $paymentMethod, $isReseller) {
+    return DB::transaction(function () use ($userId, $cartIds, $isReseller, $paymentProof) {
       $cartItems = $this->cartRepo->findByUserAndIds($userId, $cartIds, true);
 
       if ($cartItems->isEmpty()) {
@@ -51,14 +58,28 @@ class OrderService
         throw new \Exception('Reseller wajib membeli minimal 5 item', 400);
       }
 
-      $totalAmount = $cartItems->sum(function ($item) {
-        return $item->price * $item->quantity;
+      $totalAmount = $cartItems->sum(function ($item) use ($isReseller) {
+        if ($item->productVariant) {
+          if ($isReseller) {
+            return $item->productVariant->reseller_price * $item->quantity;
+          } else {
+            return $item->productVariant->price * $item->quantity;
+          }
+        } else {
+          if ($isReseller) {
+            return $item->product->reseller_price * $item->quantity;
+          } else {
+            return $item->product->base_price * $item->quantity;
+          }
+        }
       });
 
       $order = $this->orderRepo->create([
+        'transaction_id' => Transaction::generateCode(),
         'user_id' => $userId,
         'total_amount' => $totalAmount,
         'status' => 'pending',
+        'is_reseller' => $isReseller,
       ]);
 
       $this->orderItemRepo->createMany(
@@ -84,13 +105,14 @@ class OrderService
         })->toArray()
       );
 
+      // Handle store payment proof to storage
+      $paymentProofUrl = Upload::upload($paymentProof, 'payment_proofs');
+
       $this->paymentRepo->create([
-        'transaction_id' => (string) Str::uuid(),
         'user_id' => $userId,
         'order_id' => $order->id,
         'amount' => $totalAmount,
-        'method' => $paymentMethod,
-        'status' => 'pending',
+        'payment_proof' => $paymentProofUrl,
       ]);
 
       $this->cartRepo->removeByIds($cartIds, $userId);
@@ -103,5 +125,19 @@ class OrderService
   {
     $userId = auth()->id();
     return $this->orderRepo->findByUser($userId)->load(['items.productVariant.product', 'payment']);
+  }
+
+  public function getByTransactionId($transactionId)
+  {
+    $order = $this->orderRepo->findByTransactionId($transactionId);
+    if (!$order) {
+        return null;
+    }
+    return $order->load(['items.product', 'items.productVariant', 'payment', 'user']);
+  }
+
+  public function update($id, $data)
+  {
+    return $this->orderRepo->update($id, $data);
   }
 }

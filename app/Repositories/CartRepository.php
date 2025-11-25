@@ -8,7 +8,7 @@ class CartRepository
 {
     public function findByUser($userId)
     {
-        return Cart::with(['product', 'productVariant'])
+        return Cart::with(['product.productImages', 'productVariant.productVariantImages'])
             ->where('user_id', $userId)
             ->orderByDesc('created_at')
             ->get();
