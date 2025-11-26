@@ -19,6 +19,10 @@ class ProductRepository
     if (!empty($filters['category_id'])) {
       $query = $query->where('category_id', $filters['category_id']);
     }
+    
+    if (!empty($filters['status'])) {
+      $query = $query->where('status', $filters['status']);
+    }
 
     return $query->get();
   }

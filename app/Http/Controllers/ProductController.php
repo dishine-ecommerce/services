@@ -19,8 +19,10 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $categoryId = $request->query('category_id');
+        $status = $request->query('status');
         $products = $this->productService->get([
-            'category_id' => $categoryId
+            'category_id' => $categoryId,
+            'status' => $status
         ]);
         return response()->json($products);
     }
