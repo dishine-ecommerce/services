@@ -16,9 +16,9 @@ class ProductService
     $this->pImageService = new ProductImageService();
   }
 
-  public function get()
+  public function get(array $filters = [])
   {
-    return $this->productRepo->get();
+    return $this->productRepo->get($filters);
   }
 
   public function getBySlug(string $slug)

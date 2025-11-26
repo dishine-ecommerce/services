@@ -12,9 +12,15 @@ class ProductRepository
     $this->model = new Product();
   }
 
-  public function get()
+  public function get(array $filters = [])
   {
-    return $this->model->with('category', 'productImages')->get();
+    $query = $this->model->with(['category', 'productImages']);
+
+    if (!empty($filters['category_id'])) {
+      $query = $query->where('category_id', $filters['category_id']);
+    }
+
+    return $query->get();
   }
 
   public function getById($id)

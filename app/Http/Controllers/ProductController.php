@@ -16,9 +16,13 @@ class ProductController extends Controller
         $this->productService = new ProductService();
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json($this->productService->get());
+        $categoryId = $request->query('category_id');
+        $products = $this->productService->get([
+            'category_id' => $categoryId
+        ]);
+        return response()->json($products);
     }
 
     public function show($slug)
