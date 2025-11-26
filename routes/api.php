@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShippingController;
@@ -58,6 +59,12 @@ Route::prefix('product-variants')->group(function () {
 // Variant Images delete
 Route::delete('product-variant-images/{id}', [ProductVariantImageController::class, 'destroy'])->middleware(['auth:sanctum', 'role:admin']);
 
+// Category Routes
+Route::get('categories', [CategoryController::class, 'index']);
+Route::get('categories/{id}', [CategoryController::class, 'show']);
+Route::get('categories/parent/{parentId}', [CategoryController::class, 'getByParentId']);
+Route::get('categories-root', [CategoryController::class, 'root']);
+
 Route::middleware('auth:sanctum')->group(function () {
     // Carts
     Route::post('carts/clear', [CartController::class, 'clear']);
@@ -79,15 +86,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/cost', [ShippingController::class, 'calculateShipping']);
     });
 
-    // Category Routes
-    Route::get('categories', [\App\Http\Controllers\CategoryController::class, 'index']);
-    Route::get('categories/{id}', [\App\Http\Controllers\CategoryController::class, 'show']);
-    Route::get('categories/parent/{parentId}', [\App\Http\Controllers\CategoryController::class, 'getByParentId']);
-    Route::get('categories-root', [\App\Http\Controllers\CategoryController::class, 'root']);
-
+    // Category
     Route::middleware(['role:admin'])->group(function () {
-        Route::post('categories', [\App\Http\Controllers\CategoryController::class, 'store']);
-        Route::put('categories/{id}', [\App\Http\Controllers\CategoryController::class, 'update']);
-        Route::delete('categories/{id}', [\App\Http\Controllers\CategoryController::class, 'destroy']);
+        Route::post('categories', [CategoryController::class, 'store']);
+        Route::put('categories/{id}', [CategoryController::class, 'update']);
+        Route::delete('categories/{id}', [CategoryController::class, 'destroy']);
     });
 });
