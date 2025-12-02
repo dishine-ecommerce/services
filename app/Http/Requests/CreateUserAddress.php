@@ -20,6 +20,7 @@ class CreateUserAddress extends FormRequest
             'address_line' => 'required|string|max:255',
             'province' => 'required|string|max:100',
             'city' => 'required|string|max:100',
+            'city_id' => 'required|integer',
             'district' => 'required|string|max:100',
             'sub_district' => 'required|string|max:100',
             'postal_code' => 'required|integer',

@@ -17,5 +17,6 @@ class UserAddress extends Model
         'district', 
         'sub_district', 
         'postal_code',
+        'city_id',
     ];
 }

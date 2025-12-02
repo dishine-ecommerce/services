@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Storage;
 
 class UserService
 {
@@ -29,5 +30,27 @@ class UserService
         }
         $this->userRepo->verify($user);
         return $user;
+    }
+
+    public function updateAvatar($userId, $avatarFile)
+    {
+        $user = $this->userRepo->getById($userId);
+        if (!$user) {
+            throw new \Exception('User not found', 404);
+        }
+
+        $path = $avatarFile->store('avatars', 'public');
+        if (!$path) {
+            throw new \Exception('Failed to upload avatar', 500);
+        }
+
+        if ($user->avatar) {
+            Storage::disk('public')->delete($user->avatar);
+        }
+
+        $data = ['avatar' => $path];
+        $updatedUser = $this->userRepo->update($userId, $data);
+
+        return $updatedUser;
     }
 }

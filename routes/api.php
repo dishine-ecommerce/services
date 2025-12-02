@@ -25,6 +25,7 @@ Route::prefix('auth')->group(function() {
 // User Routes
 Route::middleware('auth:sanctum')->group(function() {
     Route::prefix('user')->group(function() {
+        Route::post('avatar', [AuthController::class, 'updateAvatar']);
         Route::apiResource('address', UserAddressController::class);
     });
 });
