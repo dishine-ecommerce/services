@@ -19,7 +19,10 @@ class UpdateUserAddress extends FormRequest
             'label' => 'string|max:255',
             'address_line' => 'string|max:255',
             'city' => 'string|max:100',
+            'city_id' => 'integer',
             'province' => 'string|max:100',
+            'district' => 'string|max:100',
+            'sub_district' => 'string|max:100',
             'postal_code' => 'integer',
         ];
     }
