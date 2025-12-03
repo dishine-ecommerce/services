@@ -10,6 +10,7 @@ class Order extends Model
         'transaction_id',
         'user_id',
         'total_amount',
+        'shipping_cost',
         'status',
         'is_reseller',
     ];

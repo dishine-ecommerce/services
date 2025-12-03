@@ -52,6 +52,7 @@ class OrderController
         $userId,
         $request->input('cart_ids', []),
         $request->input('is_reseller'),
+        $request->input('shipping_cost'),
         $paymentProof,
       );
 

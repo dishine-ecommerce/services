@@ -31,7 +31,13 @@ class OrderService
     return $this->orderRepo->all($status);
   }
 
-  public function createOrder(int $userId, array $cartIds, bool $isReseller, $paymentProof)
+  public function createOrder(
+    int $userId, 
+    array $cartIds, 
+    bool $isReseller, 
+    $shippingCost,
+    $paymentProof
+  )
   {
     $cartIds = array_values(array_unique($cartIds));
 
@@ -39,7 +45,7 @@ class OrderService
       throw new \Exception('Cart items are required', 422);
     }
 
-    return DB::transaction(function () use ($userId, $cartIds, $isReseller, $paymentProof) {
+    return DB::transaction(function () use ($userId, $cartIds, $isReseller, $shippingCost, $paymentProof) {
       $cartItems = $this->cartRepo->findByUserAndIds($userId, $cartIds, true);
 
       if ($cartItems->isEmpty()) {
@@ -78,6 +84,7 @@ class OrderService
         'transaction_id' => Transaction::generateCode(),
         'user_id' => $userId,
         'total_amount' => $totalAmount,
+        'shipping_cost' => $shippingCost,
         'status' => 'pending',
         'is_reseller' => $isReseller,
       ]);
